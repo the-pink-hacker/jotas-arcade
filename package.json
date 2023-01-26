@@ -1,0 +1,33 @@
+{
+  "name": "jotas-arcade",
+  "version": "1.0.0",
+  "description": "A collection of retro games ",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "serve": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyanGar46/jotas-arcade.git"
+  },
+  "keywords": [
+    "rust",
+    "wasm",
+    "game"
+  ],
+  "author": "Ryan Garrett",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/RyanGar46/jotas-arcade/issues"
+  },
+  "homepage": "https://github.com/RyanGar46/jotas-arcade#readme",
+  "devDependencies": {
+    "@wasm-tool/wasm-pack-plugin": "1.0.1",
+    "text-encoding": "^0.7.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.29.4",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.1.0"
+  }
+}
