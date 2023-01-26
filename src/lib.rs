@@ -1,3 +1,4 @@
+use bevy::prelude::*;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -14,4 +15,27 @@ macro_rules! console_log {
 #[wasm_bindgen]
 pub fn setup_game() {
     console_log!("Setup game...");
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_system(setup_camera_system)
+        .add_system(spawn_sprite_system)
+        .run();
+}
+
+fn setup_camera_system(mut commands: Commands) {
+    commands.spawn(Camera2dBundle::default());
+}
+
+fn spawn_sprite_system(mut commands: Commands) {
+    commands.spawn(SpriteBundle {
+        sprite: Sprite {
+            color: Color::WHITE,
+            ..default()
+        },
+        transform: Transform {
+            scale: Vec3::new(64.0, 64.0, 1.0),
+            ..default()
+        },
+        ..default()
+    });
 }
