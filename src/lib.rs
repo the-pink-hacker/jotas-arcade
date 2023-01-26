@@ -1,4 +1,4 @@
-use bevy::{prelude::*, time::FixedTimestep};
+use bevy::prelude::*;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -12,7 +12,8 @@ macro_rules! console_log {
     ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
 
-const FIXED_UPDATE_INTERVAL: f64 = 1.0 / 30.0;
+#[derive(Component)]
+struct Player;
 
 #[wasm_bindgen]
 pub fn setup_game() {
@@ -20,8 +21,9 @@ pub fn setup_game() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_startup_system(setup_camera_system)
-        .add_startup_system(spawn_sprite_system)
-        .add_system(debug_fps_system)
+        .add_startup_system(spawn_player_system)
+        //.add_system(debug_fps_system)
+        .add_system(move_player_system)
         .run();
 }
 
@@ -34,16 +36,25 @@ fn setup_camera_system(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
 }
 
-fn spawn_sprite_system(mut commands: Commands) {
-    commands.spawn(SpriteBundle {
-        sprite: Sprite {
-            color: Color::WHITE,
+fn spawn_player_system(mut commands: Commands) {
+    commands.spawn((
+        Player,
+        SpriteBundle {
+            sprite: Sprite {
+                color: Color::WHITE,
+                ..default()
+            },
+            transform: Transform {
+                scale: Vec3::new(64.0, 64.0, 1.0),
+                ..default()
+            },
             ..default()
         },
-        transform: Transform {
-            scale: Vec3::new(64.0, 64.0, 1.0),
-            ..default()
-        },
-        ..default()
-    });
+    ));
+}
+
+fn move_player_system(mut query: Query<&mut Transform, With<Player>>) {
+    if let Ok(mut transform) = query.get_single_mut() {
+        transform.translation += Vec3::new(1.0, 0.0, 0.0);
+    }
 }
