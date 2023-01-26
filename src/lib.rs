@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, time::FixedTimestep};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -12,14 +12,22 @@ macro_rules! console_log {
     ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
 
+const FIXED_UPDATE_INTERVAL: f64 = 1.0 / 30.0;
+
 #[wasm_bindgen]
 pub fn setup_game() {
     console_log!("Setup game...");
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_system(setup_camera_system)
-        .add_system(spawn_sprite_system)
+        .add_startup_system(setup_camera_system)
+        .add_startup_system(spawn_sprite_system)
+        .add_system(debug_fps_system)
         .run();
+}
+
+fn debug_fps_system(time: Res<Time>) {
+    let fps = 1.0 / time.delta_seconds();
+    console_log!("{}", fps);
 }
 
 fn setup_camera_system(mut commands: Commands) {
