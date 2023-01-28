@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/RyanGar46/jotas-arcade#readme",
   "devDependencies": {
-    "@wasm-tool/wasm-pack-plugin": "1.0.1",
+    "@wasm-tool/wasm-pack-plugin": "1.6.0",
     "text-encoding": "^0.7.0",
     "webpack": "^4.29.4",
     "webpack-cli": "^3.1.1",
