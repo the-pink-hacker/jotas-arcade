@@ -1,13 +1,24 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, time::FixedTimestep};
 
-use crate::components::Paddle;
+use crate::{components::Paddle, FIXED_UPDATE_INTERVAL, WINDOW_WIDTH};
+
+const PADDLE_WIDTH: f32 = 16.0;
+const PADDLE_SPACING_MARGIN: f32 = 32.0;
+const PADDLE_SPACING: f32 =
+    (WINDOW_WIDTH as f32 / 2.0) - (PADDLE_WIDTH / 2.0) - PADDLE_SPACING_MARGIN;
+const PADDLE_SPEED: f32 = 256.0;
 
 pub struct PaddlePlugin;
 
 impl Plugin for PaddlePlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_paddles_system)
-            .add_system(move_paddles_system);
+        app.add_startup_system(setup_paddles_system).add_system_set(
+            SystemSet::new()
+                .with_run_criteria(FixedTimestep::steps_per_second(
+                    FIXED_UPDATE_INTERVAL as f64,
+                ))
+                .with_system(move_paddles_system),
+        );
     }
 }
 
@@ -33,7 +44,7 @@ impl PaddleBundle {
                     ..default()
                 },
                 transform: Transform {
-                    scale: Vec3::new(16.0, 128.0, 1.0),
+                    scale: Vec3::new(PADDLE_WIDTH, 128.0, 1.0),
                     translation: translation,
                     ..default()
                 },
@@ -44,8 +55,6 @@ impl PaddleBundle {
 }
 
 fn setup_paddles_system(mut commands: Commands) {
-    const PADDLE_SPACING: f32 = 128.0;
-
     commands.spawn(PaddleBundle::new(
         Paddle {
             paddle_type: PaddleType::Left,
@@ -61,7 +70,11 @@ fn setup_paddles_system(mut commands: Commands) {
     ));
 }
 
-fn move_paddles_system(mut query: Query<(&Paddle, &mut Transform)>, input: Res<Input<KeyCode>>) {
+fn move_paddles_system(
+    mut query: Query<(&Paddle, &mut Transform)>,
+    input: Res<Input<KeyCode>>,
+    time: Res<Time>,
+) {
     for (paddle, mut transform) in query.iter_mut() {
         let mut direction = 0;
 
@@ -84,6 +97,10 @@ fn move_paddles_system(mut query: Query<(&Paddle, &mut Transform)>, input: Res<I
             }
         };
 
-        transform.translation += Vec3::new(0.0, 1.0 * direction as f32, 0.0);
+        transform.translation += Vec3::new(
+            0.0,
+            PADDLE_SPEED * direction as f32 * time.delta_seconds(),
+            0.0,
+        );
     }
 }

@@ -6,6 +6,10 @@ use crate::paddle::PaddlePlugin;
 mod components;
 mod paddle;
 
+pub const WINDOW_WIDTH: i16 = 1280;
+pub const WINDOW_HEIGHT: i16 = 720;
+pub const FIXED_UPDATE_INTERVAL: f32 = 60.0;
+
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = console)]
@@ -17,9 +21,6 @@ macro_rules! console_log {
     // `bare_bones`
     ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
-
-#[derive(Component)]
-struct Player;
 
 #[wasm_bindgen]
 pub fn setup_game() {
