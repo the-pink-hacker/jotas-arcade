@@ -1,6 +1,11 @@
 use bevy::prelude::*;
 use wasm_bindgen::prelude::*;
 
+use crate::paddle::PaddlePlugin;
+
+mod components;
+mod paddle;
+
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = console)]
@@ -21,19 +26,20 @@ pub fn setup_game() {
     console_log!("Setup game...");
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugin(PaddlePlugin)
         .add_startup_system(setup_camera_system)
-        .add_startup_system(spawn_player_system)
         .add_startup_system(javascript_event_system)
         //.add_system(debug_fps_system)
-        .add_system(move_player_system)
         .run();
 }
 
+/// Runs javascript code after the game is setup
 fn javascript_event_system() {
     console_log!("Game setup");
     postGameSetup();
 }
 
+#[allow(dead_code)]
 fn debug_fps_system(time: Res<Time>) {
     let fps = 1.0 / time.delta_seconds();
     console_log!("{}", fps);
@@ -41,27 +47,4 @@ fn debug_fps_system(time: Res<Time>) {
 
 fn setup_camera_system(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
-}
-
-fn spawn_player_system(mut commands: Commands) {
-    commands.spawn((
-        Player,
-        SpriteBundle {
-            sprite: Sprite {
-                color: Color::WHITE,
-                ..default()
-            },
-            transform: Transform {
-                scale: Vec3::new(64.0, 64.0, 1.0),
-                ..default()
-            },
-            ..default()
-        },
-    ));
-}
-
-fn move_player_system(mut query: Query<&mut Transform, With<Player>>) {
-    if let Ok(mut transform) = query.get_single_mut() {
-        transform.translation += Vec3::new(1.0, 0.0, 0.0);
-    }
 }
