@@ -6,7 +6,8 @@ pub struct PaddlePlugin;
 
 impl Plugin for PaddlePlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_paddles_system);
+        app.add_startup_system(setup_paddles_system)
+            .add_system(move_paddles_system);
     }
 }
 
@@ -58,4 +59,31 @@ fn setup_paddles_system(mut commands: Commands) {
         },
         Vec3::new(PADDLE_SPACING, 0.0, 0.0),
     ));
+}
+
+fn move_paddles_system(mut query: Query<(&Paddle, &mut Transform)>, input: Res<Input<KeyCode>>) {
+    for (paddle, mut transform) in query.iter_mut() {
+        let mut direction = 0;
+
+        match paddle.paddle_type {
+            PaddleType::Left => {
+                if input.pressed(KeyCode::W) {
+                    direction += 1;
+                }
+                if input.pressed(KeyCode::S) {
+                    direction -= 1;
+                }
+            }
+            PaddleType::Right => {
+                if input.pressed(KeyCode::Up) {
+                    direction += 1;
+                }
+                if input.pressed(KeyCode::Down) {
+                    direction -= 1;
+                }
+            }
+        };
+
+        transform.translation += Vec3::new(0.0, 1.0 * direction as f32, 0.0);
+    }
 }
