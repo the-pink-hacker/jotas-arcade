@@ -5,6 +5,7 @@ use wasm_bindgen::prelude::*;
 extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
+    fn postGameSetup();
 }
 macro_rules! console_log {
     // Note that this is using the `log` function imported above during
@@ -22,9 +23,15 @@ pub fn setup_game() {
         .add_plugins(DefaultPlugins)
         .add_startup_system(setup_camera_system)
         .add_startup_system(spawn_player_system)
+        .add_startup_system(javascript_event_system)
         //.add_system(debug_fps_system)
         .add_system(move_player_system)
         .run();
+}
+
+fn javascript_event_system() {
+    console_log!("Game setup");
+    postGameSetup();
 }
 
 fn debug_fps_system(time: Res<Time>) {

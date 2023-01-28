@@ -6,10 +6,33 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jota's Arcade Demo</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <style>
+    body {
+      max-width: 100%;
+    }
+
+    #game-canvas {
+      aspect-ratio: 16/9;
+      width: 100%;
+    }
+  </style>
+  <script type="text/javascript">
+    function postGameSetup() {
+      // Initialize game canvas
+      $("canvas").removeAttr("style")
+        .attr("id", "game-canvas");
+      const canvas = document.getElementById("game-canvas");
+      const canvasPlaceholder = document.getElementById("game-canvas-placeholder");
+      canvasPlaceholder.insertAdjacentElement("beforebegin", canvas);
+      canvasPlaceholder.parentNode.removeChild(canvasPlaceholder);
+    }
+  </script>
 </head>
 
 <body>
   <h>Jota's Arcade Demo</h>
+  <div id="game-canvas-placeholder"></div>
   <p>Developed by: <a href="https://the-pink-hacker.tumblr.com">Ryan Garrett (the-pink-hacker)</a></p>
   <script type="text/javascript" src="index.js"></script>
 </body>
