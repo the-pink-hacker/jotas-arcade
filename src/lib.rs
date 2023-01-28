@@ -30,6 +30,7 @@ pub fn setup_game() {
         .add_plugin(PaddlePlugin)
         .add_startup_system(setup_camera_system)
         .add_startup_system(javascript_event_system)
+        .insert_resource(ClearColor(Color::rgb_u8(25, 25, 25)))
         //.add_system(debug_fps_system)
         .run();
 }
