@@ -2,7 +2,7 @@
   "name": "jotas-arcade",
   "version": "1.0.0",
   "description": "A collection of retro games ",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "build": "webpack",
     "serve": "webpack-dev-server"
