@@ -4,7 +4,8 @@
   "description": "A collection of retro games ",
   "private": true,
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --mode=production",
+    "build-dev": "webpack",
     "serve": "webpack-dev-server"
   },
   "repository": {
