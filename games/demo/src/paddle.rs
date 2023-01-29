@@ -2,10 +2,10 @@ use bevy::prelude::*;
 
 use crate::{components::Paddle, WINDOW_HEIGHT, WINDOW_WIDTH};
 
-const PADDLE_SPEED: f32 = 256.0;
+const PADDLE_SPEED: f32 = 512.0;
 
-const PADDLE_WIDTH: f32 = 16.0;
-const PADDLE_HEIGHT: f32 = 128.0;
+const PADDLE_WIDTH: f32 = 32.0;
+const PADDLE_HEIGHT: f32 = 256.0;
 
 const PADDLE_SPACING_MARGIN: f32 = 32.0;
 const PADDLE_SPACING: f32 =

@@ -7,10 +7,10 @@ mod ball;
 mod components;
 mod paddle;
 
-pub const WINDOW_WIDTH: i16 = 1280;
-pub const WINDOW_HEIGHT: i16 = 720;
-pub const ASPECT_RATIO_WIDTH: i8 = 16;
-pub const ASPECT_RATIO_HEIGHT: i8 = 9;
+pub const WINDOW_WIDTH: i16 = 1920;
+pub const WINDOW_HEIGHT: i16 = 1440;
+pub const ASPECT_RATIO_WIDTH: i8 = 4;
+pub const ASPECT_RATIO_HEIGHT: i8 = 3;
 
 #[wasm_bindgen]
 pub struct GameInfo {
@@ -65,12 +65,19 @@ macro_rules! console_log {
 pub fn setup_game() {
     console_log!("Setup game...");
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            window: WindowDescriptor {
+                width: WINDOW_WIDTH as f32,
+                height: WINDOW_HEIGHT as f32,
+                ..default()
+            },
+            ..default()
+        }))
         .add_plugin(BallPlugin)
         .add_plugin(PaddlePlugin)
+        .insert_resource(ClearColor(Color::rgb_u8(25, 25, 25)))
         .add_startup_system(setup_camera_system)
         .add_startup_system(javascript_event_system)
-        .insert_resource(ClearColor(Color::rgb_u8(25, 25, 25)))
         //.add_system(debug_fps_system)
         .run();
 }

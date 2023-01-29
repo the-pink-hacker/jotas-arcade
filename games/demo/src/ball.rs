@@ -2,8 +2,8 @@ use bevy::prelude::*;
 
 use crate::components::{Ball, Velocity};
 
-const BALL_SIZE: f32 = 16.0;
-const BALL_SPEED: f32 = 128.0;
+const BALL_SIZE: f32 = 32.0;
+const BALL_SPEED: f32 = 256.0;
 
 pub struct BallPlugin;
 

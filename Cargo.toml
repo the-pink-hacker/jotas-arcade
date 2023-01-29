@@ -10,7 +10,6 @@ opt-level = 1
 [profile.dev.package."*"]
 opt-level = 3
 
-
 [profile.wasm-release]
 # Use release profile as default values
 inherits = "release"
