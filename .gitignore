@@ -1,9 +1,9 @@
 # Rust
 target/
-/Cargo.lock
+Cargo.lock
 
 # Node
-/package-lock.json
+package-lock.json
 node_modules/
 pkg/
 dist/

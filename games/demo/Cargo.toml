@@ -10,6 +10,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 bevy = "0.9.1"
+num = "0.4.0"
 wasm-bindgen = "0.2.83"
 
 # Enable a small amount of optimization in debug mode

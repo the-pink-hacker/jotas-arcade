@@ -1,12 +1,17 @@
-use bevy::{prelude::*, time::FixedTimestep};
+use bevy::prelude::*;
 
-use crate::{components::Paddle, FIXED_UPDATE_INTERVAL, WINDOW_WIDTH};
+use crate::{components::Paddle, WINDOW_HEIGHT, WINDOW_WIDTH};
+
+const PADDLE_SPEED: f32 = 256.0;
 
 const PADDLE_WIDTH: f32 = 16.0;
+const PADDLE_HEIGHT: f32 = 128.0;
+
 const PADDLE_SPACING_MARGIN: f32 = 32.0;
 const PADDLE_SPACING: f32 =
     (WINDOW_WIDTH as f32 / 2.0) - (PADDLE_WIDTH / 2.0) - PADDLE_SPACING_MARGIN;
-const PADDLE_SPEED: f32 = 256.0;
+const PADDLE_MAX_HEIGHT: f32 =
+    (WINDOW_HEIGHT as f32 / 2.0) - (PADDLE_HEIGHT / 2.0) - PADDLE_SPACING_MARGIN;
 
 pub struct PaddlePlugin;
 
@@ -39,7 +44,7 @@ impl PaddleBundle {
                     ..default()
                 },
                 transform: Transform {
-                    scale: Vec3::new(PADDLE_WIDTH, 128.0, 1.0),
+                    scale: Vec3::new(PADDLE_WIDTH, PADDLE_HEIGHT, 1.0),
                     translation: translation,
                     ..default()
                 },
@@ -92,10 +97,13 @@ fn move_paddles_system(
             }
         };
 
-        transform.translation += Vec3::new(
-            0.0,
-            PADDLE_SPEED * direction as f32 * time.delta_seconds(),
-            0.0,
+        let updated_y = num::clamp(
+            transform.translation.y + (PADDLE_SPEED * direction as f32 * time.delta_seconds()),
+            -PADDLE_MAX_HEIGHT,
+            PADDLE_MAX_HEIGHT,
         );
+
+        transform.translation =
+            Vec3::new(transform.translation.x, updated_y, transform.translation.z);
     }
 }
