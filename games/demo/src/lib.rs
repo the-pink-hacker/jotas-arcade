@@ -1,8 +1,9 @@
 use bevy::prelude::*;
 use wasm_bindgen::prelude::*;
 
-use crate::paddle::PaddlePlugin;
+use crate::{ball::BallPlugin, paddle::PaddlePlugin};
 
+mod ball;
 mod components;
 mod paddle;
 
@@ -65,6 +66,7 @@ pub fn setup_game() {
     console_log!("Setup game...");
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugin(BallPlugin)
         .add_plugin(PaddlePlugin)
         .add_startup_system(setup_camera_system)
         .add_startup_system(javascript_event_system)

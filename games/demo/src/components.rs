@@ -6,3 +6,6 @@ use crate::paddle::PaddleType;
 pub struct Paddle {
     pub paddle_type: PaddleType,
 }
+
+#[derive(Component)]
+pub struct Ball;
