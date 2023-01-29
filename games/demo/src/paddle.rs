@@ -12,13 +12,8 @@ pub struct PaddlePlugin;
 
 impl Plugin for PaddlePlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_paddles_system).add_system_set(
-            SystemSet::new()
-                .with_run_criteria(FixedTimestep::steps_per_second(
-                    FIXED_UPDATE_INTERVAL as f64,
-                ))
-                .with_system(move_paddles_system),
-        );
+        app.add_startup_system(setup_paddles_system)
+            .add_system(move_paddles_system);
     }
 }
 
