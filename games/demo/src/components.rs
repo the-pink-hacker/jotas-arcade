@@ -9,3 +9,16 @@ pub struct Paddle {
 
 #[derive(Component)]
 pub struct Ball;
+
+#[derive(Component, Debug, Default)]
+pub struct Velocity {
+    pub vector: Vec3,
+}
+
+// impl Default for Velocity {
+//     fn default() -> Self {
+//         Self {
+//             vector: Vec3::default(),
+//         }
+//     }
+// }
