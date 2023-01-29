@@ -55,6 +55,8 @@ extern "C" {
     fn log(s: &str);
     fn postGameSetup(game_info: GameInfo);
 }
+
+#[macro_export]
 macro_rules! console_log {
     // Note that this is using the `log` function imported above during
     // `bare_bones`
