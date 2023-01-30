@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{components::Paddle, WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::{components::Paddle, Direction, WINDOW_HEIGHT, WINDOW_WIDTH};
 
 const PADDLE_SPEED: f32 = 512.0;
 
@@ -8,7 +8,7 @@ const PADDLE_WIDTH: f32 = 32.0;
 const PADDLE_HEIGHT: f32 = 256.0;
 
 const PADDLE_SPACING_MARGIN: f32 = 32.0;
-const PADDLE_SPACING: f32 =
+pub const PADDLE_SPACING: f32 =
     (WINDOW_WIDTH as f32 / 2.0) - (PADDLE_WIDTH / 2.0) - PADDLE_SPACING_MARGIN;
 const PADDLE_MAX_HEIGHT: f32 =
     (WINDOW_HEIGHT as f32 / 2.0) - (PADDLE_HEIGHT / 2.0) - PADDLE_SPACING_MARGIN;
@@ -20,12 +20,6 @@ impl Plugin for PaddlePlugin {
         app.add_startup_system(setup_paddles_system)
             .add_system(move_paddles_system);
     }
-}
-
-#[derive(Debug)]
-pub enum PaddleType {
-    Left,
-    Right,
 }
 
 #[derive(Bundle)]
@@ -57,14 +51,14 @@ impl PaddleBundle {
 fn setup_paddles_system(mut commands: Commands) {
     commands.spawn(PaddleBundle::new(
         Paddle {
-            paddle_type: PaddleType::Left,
+            paddle_type: Direction::Left,
         },
         Vec3::new(-PADDLE_SPACING, 0.0, 0.0),
     ));
 
     commands.spawn(PaddleBundle::new(
         Paddle {
-            paddle_type: PaddleType::Right,
+            paddle_type: Direction::Right,
         },
         Vec3::new(PADDLE_SPACING, 0.0, 0.0),
     ));
@@ -79,7 +73,7 @@ fn move_paddles_system(
         let mut direction = 0;
 
         match paddle.paddle_type {
-            PaddleType::Left => {
+            Direction::Left => {
                 if input.pressed(KeyCode::W) {
                     direction += 1;
                 }
@@ -87,7 +81,7 @@ fn move_paddles_system(
                     direction -= 1;
                 }
             }
-            PaddleType::Right => {
+            Direction::Right => {
                 if input.pressed(KeyCode::Up) {
                     direction += 1;
                 }

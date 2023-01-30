@@ -1,6 +1,10 @@
 use bevy::prelude::*;
 
-use crate::components::{Ball, Velocity};
+use crate::{
+    components::{Ball, Paddle, Velocity},
+    paddle::PADDLE_SPACING,
+    Direction,
+};
 
 const BALL_SIZE: f32 = 32.0;
 const BALL_SPEED: f32 = 256.0;
@@ -16,7 +20,7 @@ impl Plugin for BallPlugin {
 
 fn spawn_ball_system(mut commands: Commands) {
     commands.spawn((
-        Ball,
+        Ball::default(),
         Velocity {
             vector: Vec3::new(BALL_SPEED, 0.0, 0.0),
         },
@@ -35,10 +39,29 @@ fn spawn_ball_system(mut commands: Commands) {
 }
 
 fn update_ball_position_system(
-    mut query: Query<(&Velocity, &mut Transform), With<Ball>>,
+    mut ball_query: Query<(&mut Ball, &Velocity, &mut Transform), With<Ball>>,
+    paddle_query: Query<(&Paddle, &Transform), Without<Ball>>,
     time: Res<Time>,
 ) {
-    if let Ok((velocity, mut transform)) = query.get_single_mut() {
-        transform.translation += velocity.vector * time.delta_seconds();
+    if let Ok((mut ball, velocity, mut transform)) = ball_query.get_single_mut() {
+        // Check collisions for each paddle
+        for (paddle, paddle_transform) in paddle_query.iter() {
+            let _paddle_y = paddle_transform.translation.y;
+            match paddle.paddle_type {
+                Direction::Left => {
+                    if transform.translation.x <= -PADDLE_SPACING + BALL_SIZE {
+                        ball.direction = ball.direction.toggle();
+                    }
+                }
+                Direction::Right => {
+                    if transform.translation.x >= PADDLE_SPACING - BALL_SIZE {
+                        ball.direction = ball.direction.toggle();
+                    }
+                }
+            }
+        }
+
+        let direction: i8 = ball.direction.into();
+        transform.translation += velocity.vector * direction as f32 * time.delta_seconds();
     }
 }

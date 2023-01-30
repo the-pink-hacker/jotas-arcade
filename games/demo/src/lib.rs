@@ -1,3 +1,5 @@
+use std::fmt::Debug;
+
 use bevy::prelude::*;
 use wasm_bindgen::prelude::*;
 
@@ -7,21 +9,21 @@ mod ball;
 mod components;
 mod paddle;
 
-pub const WINDOW_WIDTH: i16 = 1920;
-pub const WINDOW_HEIGHT: i16 = 1440;
-pub const ASPECT_RATIO_WIDTH: i8 = 4;
-pub const ASPECT_RATIO_HEIGHT: i8 = 3;
+pub const WINDOW_WIDTH: u16 = 1920;
+pub const WINDOW_HEIGHT: u16 = 1440;
+pub const ASPECT_RATIO_WIDTH: u8 = 4;
+pub const ASPECT_RATIO_HEIGHT: u8 = 3;
 
 #[wasm_bindgen]
 pub struct GameInfo {
-    aspect_ratio_width: i8,
-    aspect_ratio_height: i8,
+    aspect_ratio_width: u8,
+    aspect_ratio_height: u8,
 }
 
 #[wasm_bindgen]
 impl GameInfo {
     #[wasm_bindgen(constructor)]
-    pub fn new(aspect_ratio_width: i8, aspect_ratio_height: i8) -> Self {
+    pub fn new(aspect_ratio_width: u8, aspect_ratio_height: u8) -> Self {
         Self {
             aspect_ratio_width: aspect_ratio_width,
             aspect_ratio_height: aspect_ratio_height,
@@ -29,23 +31,48 @@ impl GameInfo {
     }
 
     #[wasm_bindgen(getter)]
-    pub fn aspect_ratio_width(&self) -> i8 {
+    pub fn aspect_ratio_width(&self) -> u8 {
         self.aspect_ratio_width
     }
 
     #[wasm_bindgen(setter)]
-    pub fn set_aspect_ratio_width(&mut self, aspect_ratio_width: i8) {
+    pub fn set_aspect_ratio_width(&mut self, aspect_ratio_width: u8) {
         self.aspect_ratio_width = aspect_ratio_width;
     }
 
     #[wasm_bindgen(getter)]
-    pub fn aspect_ratio_height(&self) -> i8 {
+    pub fn aspect_ratio_height(&self) -> u8 {
         self.aspect_ratio_height
     }
 
     #[wasm_bindgen(setter)]
-    pub fn set_aspect_ratio_height(&mut self, aspect_ratio_height: i8) {
+    pub fn set_aspect_ratio_height(&mut self, aspect_ratio_height: u8) {
         self.aspect_ratio_height = aspect_ratio_height;
+    }
+}
+
+#[derive(Debug, Default, Clone, Copy)]
+pub enum Direction {
+    #[default]
+    Left,
+    Right,
+}
+
+impl Direction {
+    pub fn toggle(self) -> Self {
+        match self {
+            Direction::Left => Direction::Right,
+            Direction::Right => Direction::Left,
+        }
+    }
+}
+
+impl From<Direction> for i8 {
+    fn from(value: Direction) -> Self {
+        match value {
+            Direction::Left => -1,
+            Direction::Right => 1,
+        }
     }
 }
 
@@ -61,6 +88,14 @@ macro_rules! console_log {
     // Note that this is using the `log` function imported above during
     // `bare_bones`
     ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
+}
+
+#[allow(dead_code)]
+pub fn debug_log<T>(output: T)
+where
+    T: Debug,
+{
+    console_log!("{:?}", output);
 }
 
 #[wasm_bindgen]
