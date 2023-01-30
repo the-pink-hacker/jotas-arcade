@@ -2,7 +2,7 @@ function postGameSetup(gameInfo) {
   // Setup dynamic css
   const style = document.createElement("style");
   style.innerHTML = `:root {
-    aspect-ratio: ${gameInfo.aspect_ratio_width}/${gameInfo.aspect_ratio_height};
+    --game-aspect-ratio: ${gameInfo.aspect_ratio_width}/${gameInfo.aspect_ratio_height};
   }
   `;
   document.body.appendChild(style);
