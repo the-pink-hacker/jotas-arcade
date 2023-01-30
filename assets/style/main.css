@@ -1,12 +1,62 @@
+:root {
+  --main-font: "Courier New", Courier, monospace;
+  --main-text-color: #48e643;
+  --link-hover-color: #38ff0e;
+  --link-hover-line-size: 2px;
+  --link-hover-line-offset: 2px;
+  --link-hover-line-blink-time: 1.0s;
+  --hover-time: 0.25s;
+}
+
 body {
   max-width: 100%;
   margin: 0;
   min-height: 100vh;
   background-color: #111111;
-  color: white;
+  color: var(--main-text-color);
   display: flex;
   align-items: center;
   flex-direction: column;
+  font-family: var(--main-font);
+}
+
+a,
+a:visited {
+  color: var(--main-text-color);
+  transition: color var(--hover-time);
+  font-weight: bold;
+  text-decoration: none;
+  position: relative;
+}
+
+a:hover {
+  color: var(--link-hover-color);
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0%;
+  }
+
+  50% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 0%;
+  }
+}
+
+a:hover::after {
+  content: "";
+  animation: fade-in-out var(--link-hover-line-blink-time) infinite;
+  height: var(--link-hover-line-size);
+  display: inline-block;
+  position: absolute;
+  background-color: var(--link-hover-color);
+  left: 0;
+  right: 0;
+  bottom: calc(var(--link-hover-line-size) * -1 + var(--link-hover-line-offset));
 }
 
 #banner-wrapper {
@@ -23,7 +73,8 @@ body {
 
 #main {
   min-width: 720px;
-  max-width: 67%;
+  width: 67%;
+  max-width: 900px;
   flex: 1;
   padding: 8px;
   background-color: #0f0f0f;
@@ -34,7 +85,13 @@ body {
 }
 
 #content {
+  display: flex;
+  flex-direction: column;
   flex: auto 1 1;
+}
+
+#content h1 {
+  align-self: center;
 }
 
 #game-canvas-wrapper {
