@@ -4,8 +4,8 @@ use crate::{components::Paddle, Direction, WINDOW_HEIGHT, WINDOW_WIDTH};
 
 const PADDLE_SPEED: f32 = 512.0;
 
-const PADDLE_WIDTH: f32 = 32.0;
-const PADDLE_HEIGHT: f32 = 256.0;
+pub const PADDLE_WIDTH: f32 = 32.0;
+pub const PADDLE_HEIGHT: f32 = 256.0;
 
 const PADDLE_SPACING_MARGIN: f32 = 32.0;
 pub const PADDLE_SPACING: f32 =
@@ -91,11 +91,9 @@ fn move_paddles_system(
             }
         };
 
-        let updated_y = num::clamp(
-            transform.translation.y + (PADDLE_SPEED * direction as f32 * time.delta_seconds()),
-            -PADDLE_MAX_HEIGHT,
-            PADDLE_MAX_HEIGHT,
-        );
+        let updated_y = (transform.translation.y
+            + (PADDLE_SPEED * direction as f32 * time.delta_seconds()))
+        .clamp(-PADDLE_MAX_HEIGHT, PADDLE_MAX_HEIGHT);
 
         transform.translation =
             Vec3::new(transform.translation.x, updated_y, transform.translation.z);

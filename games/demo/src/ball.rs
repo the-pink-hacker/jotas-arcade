@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     components::{Ball, Paddle, Velocity},
-    paddle::PADDLE_SPACING,
+    paddle::{PADDLE_HEIGHT, PADDLE_SPACING},
     Direction,
 };
 
@@ -40,21 +40,24 @@ fn spawn_ball_system(mut commands: Commands) {
 
 fn update_ball_position_system(
     mut ball_query: Query<(&mut Ball, &Velocity, &mut Transform), With<Ball>>,
-    paddle_query: Query<(&Paddle, &Transform), Without<Ball>>,
+    paddle_query: Query<&Transform, Without<Ball>>,
     time: Res<Time>,
 ) {
     if let Ok((mut ball, velocity, mut transform)) = ball_query.get_single_mut() {
-        // Check collisions for each paddle
-        for (paddle, paddle_transform) in paddle_query.iter() {
-            let _paddle_y = paddle_transform.translation.y;
-            match paddle.paddle_type {
-                Direction::Left => {
-                    if transform.translation.x <= -PADDLE_SPACING + BALL_SIZE {
-                        ball.direction = ball.direction.toggle();
-                    }
-                }
-                Direction::Right => {
-                    if transform.translation.x >= PADDLE_SPACING - BALL_SIZE {
+        // Check X collisions
+        if transform.translation.x.abs() >= PADDLE_SPACING - BALL_SIZE {
+            // Check Y collisions for each paddle
+            for paddle_transform in paddle_query.iter() {
+                // Y higher boundary
+                if transform.translation.y
+                    <= paddle_transform.translation.y + (PADDLE_HEIGHT / 2.0) + (BALL_SIZE / 2.0)
+                {
+                    // Y lower boundary
+                    if transform.translation.y
+                        >= paddle_transform.translation.y
+                            - (PADDLE_HEIGHT / 2.0)
+                            - (BALL_SIZE / 2.0)
+                    {
                         ball.direction = ball.direction.toggle();
                     }
                 }
