@@ -1,9 +1,8 @@
 use bevy::prelude::*;
 
 use crate::{
-    components::{Ball, Paddle, Velocity},
+    components::{Ball, Velocity},
     paddle::{PADDLE_HEIGHT, PADDLE_SPACING},
-    Direction,
 };
 
 const BALL_SIZE: f32 = 32.0;
