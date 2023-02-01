@@ -8,17 +8,7 @@ pub struct Paddle {
 }
 
 #[derive(Component)]
-pub struct Ball {
-    pub direction: Direction,
-}
-
-impl Default for Ball {
-    fn default() -> Self {
-        Self {
-            direction: Direction::Right,
-        }
-    }
-}
+pub struct Ball;
 
 #[derive(Component, Debug, Default)]
 pub struct Velocity {

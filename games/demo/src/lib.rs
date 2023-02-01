@@ -1,6 +1,7 @@
 use std::fmt::Debug;
 
 use bevy::prelude::*;
+use components::Velocity;
 use wasm_bindgen::prelude::*;
 
 use crate::{ball::BallPlugin, paddle::PaddlePlugin};
@@ -115,6 +116,7 @@ pub fn setup_game() {
         .insert_resource(ClearColor(Color::rgb_u8(25, 25, 25)))
         .add_startup_system(setup_camera_system)
         .add_startup_system(javascript_event_system)
+        .add_system(apply_velocity_system)
         //.add_system(debug_fps_system)
         .run();
 }
@@ -136,4 +138,10 @@ fn debug_fps_system(time: Res<Time>) {
 
 fn setup_camera_system(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
+}
+
+fn apply_velocity_system(mut query: Query<(&mut Transform, &Velocity)>, time: Res<Time>) {
+    for (mut transform, velocity) in query.iter_mut() {
+        transform.translation += velocity.vector * time.delta_seconds();
+    }
 }
