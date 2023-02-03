@@ -8,7 +8,7 @@ use crate::{
 
 const BALL_SIZE: f32 = 32.0;
 const BALL_SIZE_HALF: f32 = BALL_SIZE / 2.0;
-const BALL_SPEED: f32 = 512.0;
+const BALL_SPEED: f32 = 1024.0;
 const MAX_HIT_ANGLE_DEGREES: f32 = 45.0;
 
 pub struct BallPlugin;
