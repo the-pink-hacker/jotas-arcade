@@ -1,23 +1,23 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require("path");
+const webpack = require("webpack");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 
 module.exports = {
-    entry: './src/index.js',
+    entry: path.resolve(__dirname, "src", "javascript", "index.js"),
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'index.js',
+        path: path.resolve(__dirname, "dist"),
+        filename: "index.js",
     },
     plugins: [
         new WasmPackPlugin({
-            crateDirectory: path.resolve(__dirname, "games", "demo")
+            crateDirectory: path.resolve(__dirname, "rust", "games", "demo")
         }),
-        // Have this example work in Edge which doesn't ship `TextEncoder` or
+        // Have this example work in Edge which doesn"t ship `TextEncoder` or
         // `TextDecoder` at this time.
         new webpack.ProvidePlugin({
-            TextDecoder: ['text-encoding', 'TextDecoder'],
-            TextEncoder: ['text-encoding', 'TextEncoder']
+            TextDecoder: ["text-encoding", "TextDecoder"],
+            TextEncoder: ["text-encoding", "TextEncoder"]
         })
     ],
-    mode: 'development'
+    mode: "development"
 };

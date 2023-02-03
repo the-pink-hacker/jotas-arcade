@@ -1,6 +1,6 @@
 [workspace]
-resolver = "2"           # Important! wgpu/Bevy needs this!
-members = ["games/demo"]
+resolver = "2"                # Important! wgpu/Bevy needs this!
+members = ["rust/games/demo"]
 
 # Enable a small amount of optimization in debug mode
 [profile.dev]
