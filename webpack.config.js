@@ -10,14 +10,14 @@ module.exports = {
     },
     plugins: [
         new WasmPackPlugin({
-            crateDirectory: path.resolve(__dirname, "rust", "games", "demo")
+            crateDirectory: path.resolve(__dirname, "rust", "games", "demo"),
         }),
         // Have this example work in Edge which doesn"t ship `TextEncoder` or
         // `TextDecoder` at this time.
         new webpack.ProvidePlugin({
             TextDecoder: ["text-encoding", "TextDecoder"],
-            TextEncoder: ["text-encoding", "TextEncoder"]
+            TextEncoder: ["text-encoding", "TextEncoder"],
         })
     ],
-    mode: "development"
+    mode: "development",
 };
