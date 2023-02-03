@@ -2,12 +2,14 @@ use bevy::{prelude::*, sprite::collide_aabb::collide};
 
 use crate::{
     components::{Ball, Collidable, Paddle, Velocity},
-    Direction, SCREEN_PADDING, WINDOW_WIDTH_HALF,
+    paddle::PADDLE_HEIGHT_HALF,
+    Direction, SCREEN_PADDING, WINDOW_HEIGHT_HALF, WINDOW_WIDTH_HALF,
 };
 
 const BALL_SIZE: f32 = 32.0;
 const BALL_SIZE_HALF: f32 = BALL_SIZE / 2.0;
 const BALL_SPEED: f32 = 512.0;
+const MAX_HIT_ANGLE_DEGREES: f32 = 45.0;
 
 pub struct BallPlugin;
 
@@ -59,7 +61,12 @@ fn check_paddle_collisions_system(
                 )
                 .is_some()
                 {
-                    velocity.vector.x *= -1.0;
+                    // TODO: Angles aren't right
+                    let hit_angle = -(velocity.vector.y - paddle_transform.translation.y)
+                        / PADDLE_HEIGHT_HALF
+                        * MAX_HIT_ANGLE_DEGREES;
+                    velocity.vector.x = hit_angle.cos() * BALL_SPEED;
+                    velocity.vector.y = hit_angle.sin() * BALL_SPEED;
                 }
             }
         }
@@ -83,13 +90,13 @@ fn check_wall_collision_system(mut ball_query: Query<(&mut Velocity, &Transform)
 
         // Check velocity to prevent multiple bounces per hit
         if velocity.vector.y > 0.0 {
-            // Down
-            if transform.translation.y + BALL_SIZE_HALF >= WINDOW_WIDTH_HALF - SCREEN_PADDING {
+            // Up
+            if transform.translation.y + BALL_SIZE_HALF >= WINDOW_HEIGHT_HALF - SCREEN_PADDING {
                 velocity.vector.y *= -1.0;
             }
         }
-        // Up
-        else if transform.translation.y - BALL_SIZE_HALF <= -WINDOW_WIDTH_HALF + SCREEN_PADDING {
+        // Down
+        else if transform.translation.y - BALL_SIZE_HALF <= -WINDOW_HEIGHT_HALF + SCREEN_PADDING {
             velocity.vector.y *= -1.0;
         }
     }
