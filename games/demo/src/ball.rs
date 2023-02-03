@@ -3,7 +3,7 @@ use bevy::{prelude::*, sprite::collide_aabb::collide};
 use crate::{
     components::{Ball, Collidable, Paddle, Velocity},
     paddle::PADDLE_HEIGHT_HALF,
-    Direction, SCREEN_PADDING, WINDOW_HEIGHT_HALF, WINDOW_WIDTH_HALF,
+    SideDirection, SCREEN_PADDING, WINDOW_HEIGHT_HALF, WINDOW_WIDTH_HALF,
 };
 
 const BALL_SIZE: f32 = 32.0;
@@ -50,8 +50,8 @@ fn check_paddle_collisions_system(
         for (paddle_transform, ball) in paddle_query.iter() {
             // Check velocity to prevent multiple bounces per hit
             if match ball.paddle_type {
-                Direction::Right => velocity.vector.x > 0.0,
-                Direction::Left => velocity.vector.x < 0.0,
+                SideDirection::Left => velocity.vector.x <= 0.0,
+                SideDirection::Right => velocity.vector.x >= 0.0,
             } {
                 if collide(
                     transform.translation,
@@ -61,12 +61,15 @@ fn check_paddle_collisions_system(
                 )
                 .is_some()
                 {
-                    // TODO: Angles aren't right
-                    let hit_angle = -(velocity.vector.y - paddle_transform.translation.y)
+                    let hit_angle = (velocity.vector.y - paddle_transform.translation.y)
                         / PADDLE_HEIGHT_HALF
                         * MAX_HIT_ANGLE_DEGREES;
-                    velocity.vector.x = hit_angle.cos() * BALL_SPEED;
-                    velocity.vector.y = hit_angle.sin() * BALL_SPEED;
+                    let direction = match ball.paddle_type {
+                        SideDirection::Left => 1.0f32,
+                        SideDirection::Right => -1.0f32,
+                    };
+                    velocity.vector.x = hit_angle.to_radians().cos() * BALL_SPEED * direction;
+                    velocity.vector.y = hit_angle.to_radians().sin() * BALL_SPEED;
                 }
             }
         }

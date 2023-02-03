@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     components::{Collidable, Paddle},
-    Direction, SCREEN_PADDING, WINDOW_HEIGHT_HALF, WINDOW_WIDTH_HALF,
+    SideDirection, SCREEN_PADDING, WINDOW_HEIGHT_HALF, WINDOW_WIDTH_HALF,
 };
 
 const PADDLE_SPEED: f32 = 512.0;
@@ -57,14 +57,14 @@ impl PaddleBundle {
 fn setup_paddles_system(mut commands: Commands) {
     commands.spawn(PaddleBundle::new(
         Paddle {
-            paddle_type: Direction::Left,
+            paddle_type: SideDirection::Left,
         },
         Vec3::new(-PADDLE_SPACING, 0.0, 0.0),
     ));
 
     commands.spawn(PaddleBundle::new(
         Paddle {
-            paddle_type: Direction::Right,
+            paddle_type: SideDirection::Right,
         },
         Vec3::new(PADDLE_SPACING, 0.0, 0.0),
     ));
@@ -79,7 +79,7 @@ fn move_paddles_system(
         let mut direction = 0;
 
         match paddle.paddle_type {
-            Direction::Left => {
+            SideDirection::Left => {
                 if input.pressed(KeyCode::W) {
                     direction += 1;
                 }
@@ -87,7 +87,7 @@ fn move_paddles_system(
                     direction -= 1;
                 }
             }
-            Direction::Right => {
+            SideDirection::Right => {
                 if input.pressed(KeyCode::Up) {
                     direction += 1;
                 }

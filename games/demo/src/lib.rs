@@ -55,27 +55,27 @@ impl GameInfo {
     }
 }
 
-#[derive(Debug, Default, Clone, Copy)]
-pub enum Direction {
+#[derive(Debug, Default, Clone, Copy, PartialEq)]
+pub enum SideDirection {
     #[default]
     Left,
     Right,
 }
 
-impl Direction {
+impl SideDirection {
     pub fn toggle(self) -> Self {
         match self {
-            Direction::Left => Direction::Right,
-            Direction::Right => Direction::Left,
+            SideDirection::Left => SideDirection::Right,
+            SideDirection::Right => SideDirection::Left,
         }
     }
 }
 
-impl From<Direction> for i8 {
-    fn from(value: Direction) -> Self {
+impl From<SideDirection> for i8 {
+    fn from(value: SideDirection) -> Self {
         match value {
-            Direction::Left => -1,
-            Direction::Right => 1,
+            SideDirection::Left => -1,
+            SideDirection::Right => 1,
         }
     }
 }

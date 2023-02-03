@@ -1,10 +1,10 @@
 use bevy::prelude::*;
 
-use crate::Direction;
+use crate::SideDirection;
 
 #[derive(Component, Debug, Default)]
 pub struct Paddle {
-    pub paddle_type: Direction,
+    pub paddle_type: SideDirection,
 }
 
 #[derive(Component, Default)]
