@@ -11,9 +11,12 @@ mod components;
 mod paddle;
 
 pub const WINDOW_WIDTH: u16 = 1920;
+pub const WINDOW_WIDTH_HALF: f32 = WINDOW_WIDTH as f32 / 2.0;
 pub const WINDOW_HEIGHT: u16 = 1440;
+pub const WINDOW_HEIGHT_HALF: f32 = WINDOW_HEIGHT as f32 / 2.0;
 pub const ASPECT_RATIO_WIDTH: u8 = 4;
 pub const ASPECT_RATIO_HEIGHT: u8 = 3;
+pub const SCREEN_PADDING: f32 = 32.0;
 
 #[wasm_bindgen]
 pub struct GameInfo {

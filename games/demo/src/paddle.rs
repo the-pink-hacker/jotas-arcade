@@ -1,17 +1,21 @@
 use bevy::prelude::*;
 
-use crate::{components::Paddle, Direction, WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::{
+    components::{Collidable, Paddle},
+    Direction, SCREEN_PADDING, WINDOW_HEIGHT_HALF, WINDOW_WIDTH_HALF,
+};
 
 const PADDLE_SPEED: f32 = 512.0;
 
 pub const PADDLE_WIDTH: f32 = 32.0;
+pub const PADDLE_WIDTH_HALF: f32 = PADDLE_WIDTH / 2.0;
 pub const PADDLE_HEIGHT: f32 = 256.0;
+pub const PADDLE_HEIGHT_HALF: f32 = PADDLE_HEIGHT / 2.0;
 
-const PADDLE_SPACING_MARGIN: f32 = 32.0;
+pub const PADDLE_MARGIN: f32 = 32.0;
 pub const PADDLE_SPACING: f32 =
-    (WINDOW_WIDTH as f32 / 2.0) - (PADDLE_WIDTH / 2.0) - PADDLE_SPACING_MARGIN;
-const PADDLE_MAX_HEIGHT: f32 =
-    (WINDOW_HEIGHT as f32 / 2.0) - (PADDLE_HEIGHT / 2.0) - PADDLE_SPACING_MARGIN;
+    WINDOW_WIDTH_HALF - PADDLE_WIDTH_HALF - SCREEN_PADDING - PADDLE_MARGIN;
+const PADDLE_MAX_HEIGHT: f32 = WINDOW_HEIGHT_HALF - PADDLE_HEIGHT_HALF - SCREEN_PADDING;
 
 pub struct PaddlePlugin;
 
@@ -22,10 +26,11 @@ impl Plugin for PaddlePlugin {
     }
 }
 
-#[derive(Bundle)]
+#[derive(Bundle, Default)]
 struct PaddleBundle {
     paddle: Paddle,
     sprite_bundle: SpriteBundle,
+    collidable: Collidable,
 }
 
 impl PaddleBundle {
@@ -44,6 +49,7 @@ impl PaddleBundle {
                 },
                 ..default()
             },
+            ..default()
         }
     }
 }
@@ -91,11 +97,8 @@ fn move_paddles_system(
             }
         };
 
-        let updated_y = (transform.translation.y
+        transform.translation.y = (transform.translation.y
             + (PADDLE_SPEED * direction as f32 * time.delta_seconds()))
         .clamp(-PADDLE_MAX_HEIGHT, PADDLE_MAX_HEIGHT);
-
-        transform.translation =
-            Vec3::new(transform.translation.x, updated_y, transform.translation.z);
     }
 }
